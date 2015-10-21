@@ -38,11 +38,11 @@ echo 'export OS_AUTH_URL=http://$CONTROLLER_IP:35357/v3' >> creds
 source creds
 
 #create keystone entries for glance
-openstack user create --password $SERVICE_PASSWD glance
+openstack user create --password $SERVICE_PWD glance
 openstack role add --project service --user glance admin
 openstack service create --name glance --description "OpenStack Image service" image
 openstack endpoint create --publicurl http://$CONTROLLER_IP:9292 --internalurl http://$CONTROLLER_IP:9292 --adminurl http://$CONTROLLER_IP:9292 --region RegionOne image
-#keystone user-create --name glance --pass $SERVICE_PASSWD
+#keystone user-create --name glance --pass $SERVICE_PWD
 #keystone user-role-add --user glance --tenant service --role admin
 #keystone service-create --name glance --type image --description "OpenStack Image Service"
 
@@ -51,8 +51,8 @@ openstack endpoint create --publicurl http://$CONTROLLER_IP:9292 --internalurl h
 
 #edit /etc/glance/glance-api.conf
 # sed -i.bak -e "/^\[database\]/a \
-# connection = mysql://glance:$SERVICE_PASSWD@$CONTROLLER_IP/glance" /etc/glance/glance-api.conf
-crudini --set --verbose /etc/glance/glance-api.conf database connection mysql://glance:$SERVICE_PASSWD@$CONTROLLER_IP/glance
+# connection = mysql://glance:$SERVICE_PWD@$CONTROLLER_IP/glance" /etc/glance/glance-api.conf
+crudini --set --verbose /etc/glance/glance-api.conf database connection mysql://glance:$SERVICE_PWD@$CONTROLLER_IP/glance
 crudini --set --verbose /etc/glance/glance-api.conf keystone_authtoken auth_uri http://$CONTROLLER_IP:5000
 crudini --set --verbose /etc/glance/glance-api.conf keystone_authtoken auth_url http://$CONTROLLER_IP:35357
 crudini --set --verbose /etc/glance/glance-api.conf keystone_authtoken auth_plugin password
@@ -60,7 +60,7 @@ crudini --set --verbose /etc/glance/glance-api.conf keystone_authtoken project_d
 crudini --set --verbose /etc/glance/glance-api.conf keystone_authtoken user_domain_id default
 crudini --set --verbose /etc/glance/glance-api.conf keystone_authtoken project_name service
 crudini --set --verbose /etc/glance/glance-api.conf keystone_authtoken username glance
-crudini --set --verbose /etc/glance/glance-api.conf keystone_authtoken password $SERVICE_PASSWD
+crudini --set --verbose /etc/glance/glance-api.conf keystone_authtoken password $SERVICE_PWD
 crudini --set --verbose /etc/glance/glance-api.conf paste_deploy flavor keystone
 
 crudini --set --verbose /etc/glance/glance-api.conf glance_store default_store file
@@ -77,7 +77,7 @@ crudini --set --verbose /etc/glance/glance-api.conf DEFAULT verbose True
 #user_domain_id = default\n\
 #project_name = service\n\
 #username = glance\n\
-#password = $SERVICE_PASSWD" /etc/glance/glance-api.conf
+#password = $SERVICE_PWD" /etc/glance/glance-api.conf
 
 #sed -i.bak -e "/^\[paste_deploy\]/a \
 #flavor = keystone" /etc/glance/glance-api.conf
@@ -86,7 +86,7 @@ crudini --set --verbose /etc/glance/glance-api.conf DEFAULT verbose True
 #identity_uri = http://$CONTROLLER_IP:35357\n\
 #admin_tenant_name = service\n\
 #admin_user = glance\n\
-#admin_password = $SERVICE_PASSWD" /etc/glance/glance-api.conf
+#admin_password = $SERVICE_PWD" /etc/glance/glance-api.conf
 
 # sed -i.bak -e "/^\[glance_store\]/a \
 # default_store = file\n\
@@ -98,9 +98,9 @@ crudini --set --verbose /etc/glance/glance-api.conf DEFAULT verbose True
 
 #edit /etc/glance/glance-registry.conf
 #sed -i.bak -e "/^\[database\]/a \
-#connection = mysql://glance:$SERVICE_PASSWD@$CONTROLLER_IP/glance" /etc/glance/glance-registry.conf
+#connection = mysql://glance:$SERVICE_PWD@$CONTROLLER_IP/glance" /etc/glance/glance-registry.conf
 
-crudini --set --verbose /etc/glance/glance-registry.conf database connection mysql://glance:$SERVICE_PASSWD@$CONTROLLER_IP/glance
+crudini --set --verbose /etc/glance/glance-registry.conf database connection mysql://glance:$SERVICE_PWD@$CONTROLLER_IP/glance
 crudini --set --verbose /etc/glance/glance-registry.conf keystone_authtoken auth_uri http://$CONTROLLER_IP:5000
 crudini --set --verbose /etc/glance/glance-registry.conf keystone_authtoken auth_url http://$CONTROLLER_IP:35357
 crudini --set --verbose /etc/glance/glance-registry.conf keystone_authtoken auth_plugin password
@@ -108,7 +108,7 @@ crudini --set --verbose /etc/glance/glance-registry.conf keystone_authtoken proj
 crudini --set --verbose /etc/glance/glance-registry.conf keystone_authtoken user_domain_id default
 crudini --set --verbose /etc/glance/glance-registry.conf keystone_authtoken project_name service
 crudini --set --verbose /etc/glance/glance-registry.conf keystone_authtoken username glance
-crudini --set --verbose /etc/glance/glance-registry.conf keystone_authtoken password $SERVICE_PASSWD
+crudini --set --verbose /etc/glance/glance-registry.conf keystone_authtoken password $SERVICE_PWD
 #sed -i.bak -e "/^\[keystone_authtoken\]/a \
 #auth_uri = http://$CONTROLLER_IP:5000\n\
 #auth_url = http://$CONTROLLER_IP:35357\n\
@@ -117,7 +117,7 @@ crudini --set --verbose /etc/glance/glance-registry.conf keystone_authtoken pass
 #user_domain_id = default\n\
 #project_name = service\n\
 #username = glance\n\
-#password = $SERVICE_PASSWD" /etc/glance/glance-registry.conf
+#password = $SERVICE_PWD" /etc/glance/glance-registry.conf
  
 crudini --set --verbose /etc/glance/glance-registry.conf paste_deploy flavor keystone
 #sed -i.bak -e "/^\[paste_deploy\]/a \
@@ -133,7 +133,7 @@ crudini --set --verbose /etc/glance/glance-registry.conf DEFAULT verbose True
 #identity_uri = http://$CONTROLLER_IP:35357
 #admin_tenant_name = service
 #admin_user = glance
-#admin_password = $SERVICE_PASSWD" /etc/glance/glance-registry.conf
+#admin_password = $SERVICE_PWD" /etc/glance/glance-registry.conf
 
 
 #start glance
@@ -144,10 +144,4 @@ systemctl start openstack-glance-api openstack-glance-registry || echo "not need
 #upload the cirros image to glance
 wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
 glance image-create --name "cirros-0.3.3-x86_64" --file cirros-0.3.4-x86_64-disk.img --disk-format qcow2 --container-format bare --is-public True --progress
-  
-#create the keystone entries for nova
-openstack user create --password $SERVICE_PASSWD nova
-openstack role add --project service --user nova admin
-openstack service create --name nova --description "OpenStack Compute" compute
-openstack endpoint create  --publicurl http://$CONTROLLER_IP:8774/v2/%\(tenant_id\)s  --internalurl http://$CONTROLLER_IP:8774/v2/%\(tenant_id\)s  --adminurl http://$CONTROLLER_IP:8774/v2/%\(tenant_id\)s  --region RegionOne  compute
-
+glance image-list
