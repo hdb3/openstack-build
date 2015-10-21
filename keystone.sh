@@ -29,3 +29,25 @@ chmod 755 /var/www/cgi-bin/keystone/*
 
 systemctl enable openstack-keystone
 systemctl start openstack-keystone
+
+#create users and tenants
+export OS_TOKEN=$ADMIN_TOKEN
+export OS_URL=http://$CONTROLLER_IP:35357/v2.0
+
+openstack service create --name keystone --description "OpenStack Identity" identity
+openstack project create --description "Admin Project" admin
+openstack user create --password password admin
+openstack role create admin
+openstack role add --project admin --user admin admin
+openstack project create --description "Service Project" service
+openstack endpoint create --publicurl http://$CONTROLLER_IP:5000/v2.0 --internalurl http://$CONTROLLER_IP:5000/v2.0 --adminurl http://$CONTROLLER_IP:35357/v2.0 --region RegionOne identity
+unset OS_TOKEN OS_URL
+
+#create credentials file
+echo 'export OS_PROJECT_DOMAIN_ID=default' >> creds
+echo 'export OS_USER_DOMAIN_ID=default' >> creds
+echo 'export OS_PROJECT_NAME=admin' >> creds
+echo 'export OS_TENANT_NAME=admin' >> creds
+echo 'export OS_USERNAME=admin' >> creds
+echo 'export OS_PASSWORD=password' >> creds
+echo 'export OS_AUTH_URL=http://$CONTROLLER_IP:35357/v3' >> creds
