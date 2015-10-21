@@ -23,18 +23,18 @@ systemctl enable httpd || echo "not needed"
 systemctl start httpd || echo "not needed"
 
 #edit /etc/my.cnf
-sed -i.bak "10i\\
-bind-address = $CONTROLLER_IP\n\
-default-storage-engine = innodb\n\
-innodb_file_per_table\n\
-collation-server = utf8_general_ci\n\
-init-connect = 'SET NAMES utf8'\n\
-character-set-server = utf8\n\
-max_connections = 25000" /etc/my.cnf
 
+source config
+sed -i -e "/^\!includedir/d" /etc/my.cnf
+sed -i -e "/^#/d" /etc/my.cnf
+crudini --set --verbose /etc/my.cnf mysqld bind-address $CONTROLLER_IP
+crudini --set --verbose /etc/my.cnf mysqld default-storage-engine innodb
+crudini --set --verbose /etc/my.cnf mysqld innodb_file_per_table
+crudini --set --verbose /etc/my.cnf mysqld collation-server utf8_general_ci
+crudini --set --verbose /etc/my.cnf mysqld init-connect "'SET NAMES utf8'"
+crudini --set --verbose /etc/my.cnf mysqld character-set-server utf8
+crudini --set --verbose /etc/my.cnf mysqld max_connections 25000
 #start database server
 systemctl enable mariadb || echo "not needed"
 systemctl start mariadb || echo "not needed"
-
-#echo 'now run through the mysql_secure_installation'
-mysql_secure_installation
+mysqladmin -u root password $DBPASSWD

@@ -16,8 +16,9 @@ sed -i.bak -e "/^\[revoke\]/a driver = keystone.contrib.revoke.backends.sql.Revo
 #keystone-manage pki_setup --keystone-user keystone --keystone-group keystone
 #chown -R keystone:keystone /var/log/keystone
 #chown -R keystone:keystone /etc/keystone/ssl
-#chmod -R o-rwx /etc/keystone/ssl
-su -s /bin/sh -c "keystone-manage db_sync" keystone
+chmod -R a-rwx /etc/keystone
+sudo -u keystone keystone-manage db_sync || echo "*** keystone-manage db_sync FAILED !"
+# su -s /bin/sh -c "keystone-manage db_sync" keystone
 
 sed -i.bak -e "/^ServerRoot/a ServerName $CONTROLLER_IP" /etc/httpd/conf/httpd.conf
 
