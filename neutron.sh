@@ -51,8 +51,8 @@ if [[ $MY_ROLE == "controller" ]] ; then
   openstack user create --password $SERVICE_PWD neutron
   openstack role add --project service --user neutron admin
   openstack service create --name neutron --description "OpenStack Networking" network
-  openstack endpoint create  --publicurl http://$CONTROLLER_IP:9696  --internalurl http://$CONTROLLER_IP:9696  --adminurl http://$CONTROLLER_IP:9696  --region RegionOne  network
+  openstack endpoint create --publicurl http://$CONTROLLER_IP:9696 --internalurl http://$CONTROLLER_IP:9696 --adminurl http://$CONTROLLER_IP:9696 --region RegionOne network
   su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
-  systemctl restart openstack-nova-api.service openstack-nova-scheduler.service openstack-nova-conductor.service
-  systemctl enable neutron-server.service
-  systemctl start neutron-server.service
+  systemctl restart openstack-nova-api openstack-nova-scheduler openstack-nova-conductor
+  systemctl enable neutron-server
+  systemctl start neutron-server

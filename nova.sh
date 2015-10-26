@@ -36,7 +36,7 @@ crudini --set --verbose /etc/nova/nova.conf neutron admin_password $SERVICE_PWD
 crudini --set --verbose /etc/nova/nova.conf neutron service_metadata_proxy True
 crudini --set --verbose /etc/nova/nova.conf neutron metadata_proxy_shared_secret meta123
 
-NOVA-CONTROLLER-SERVICES="openstack-nova-api openstack-nova-cert openstack-nova-consoleauth openstack-nova-scheduler openstack-nova-conductor openstack-nova-novncproxy"
+NOVA_CONTROLLER_SERVICES="openstack-nova-api openstack-nova-cert openstack-nova-consoleauth openstack-nova-scheduler openstack-nova-conductor openstack-nova-novncproxy"
 if [[ $MY_ROLE == "controller" ]] ; then
   echo "running controller node setup"
   source creds
@@ -45,6 +45,6 @@ if [[ $MY_ROLE == "controller" ]] ; then
   openstack service create --name nova --description "OpenStack Compute" compute
   openstack endpoint create  --publicurl http://$CONTROLLER_IP:8774/v2/%\(tenant_id\)s --internalurl http://$CONTROLLER_IP:8774/v2/%\(tenant_id\)s --adminurl http://$CONTROLLER_IP:8774/v2/%\(tenant_id\)s --region RegionOne compute
   su -s /bin/sh -c "nova-manage db sync" nova
-  systemctl enable $NOVA-CONTROLLER-SERVICES
-  systemctl start $NOVA-CONTROLLER-SERVICES
+  systemctl enable $NOVA_CONTROLLER_SERVICES
+  systemctl start $NOVA_CONTROLLER_SERVICES
 fi
