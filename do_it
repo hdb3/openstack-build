@@ -1,17 +1,14 @@
 #!/bin/bash
 source config
 $(./role.py)
-# export OPENSTACK_INSTALL=no
-# echo "OPENSTACK_INSTALL=\"$OPENSTACK_INSTALL\""
 if [[ $OPENSTACK_INSTALL == "yes" ]] ; then
   echo "Local configuration detected and valid role found"
   echo "Will now commence installation"
 else
   echo -e "\e[31mNo local configuration detected or no valid role found"
   echo -e "Will abort installation\e[0m"
-exit
+  exit
 fi
-exit
 sudo bash -ev package.sh && \
 sudo bash -ev preflight.sh && \
 sudo bash -ev mysql.sh && \
