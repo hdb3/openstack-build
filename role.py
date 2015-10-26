@@ -70,6 +70,7 @@ def main():
     else:
         envstrings.append(("MY_IP",my_roles[0][1]))
         envstrings.append(("MY_ROLE",my_roles[0][0]))
+        envstrings.append(("OPENSTACK_INSTALL","yes"))
         if len(my_roles) == 1:
             print >> stderr, cfg + "Happy days! - a role was found based on local addresses for this host - role found: %s (address %s on interface %s)" % my_roles[0]
         else:
