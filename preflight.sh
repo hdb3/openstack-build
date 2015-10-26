@@ -1,5 +1,4 @@
 #!/bin/bash
-source config
 systemctl enable ntpd || echo "not needed"
 systemctl start ntpd || echo "not needed"
 systemctl stop firewalld || echo "not needed"
@@ -24,9 +23,9 @@ systemctl start httpd || echo "not needed"
 
 #edit /etc/my.cnf
 
-source config
 sed -i -e "/^\!includedir/d" /etc/my.cnf
 sed -i -e "/^#/d" /etc/my.cnf
+echo "CONTROLLER_IP=$CONTROLLER_IP"
 crudini --set --verbose /etc/my.cnf mysqld bind-address $CONTROLLER_IP
 crudini --set --verbose /etc/my.cnf mysqld default-storage-engine innodb
 crudini --set --verbose /etc/my.cnf mysqld innodb_file_per_table
