@@ -8,4 +8,4 @@ if [[ $MY_ROLE == "controller" ]] ; then
 else
  PACKAGES="mod_wsgi python-openstackclient rabbitmq mariadb MySQL-python ntp"
 fi
-yum -y install PACKAGES
+yum -y install $PACKAGES
