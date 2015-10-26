@@ -56,3 +56,4 @@ if [[ $MY_ROLE == "controller" ]] ; then
   systemctl restart openstack-nova-api openstack-nova-scheduler openstack-nova-conductor
   systemctl enable neutron-server
   systemctl start neutron-server
+fi
