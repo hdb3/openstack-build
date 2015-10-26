@@ -18,3 +18,5 @@ There are three phases in the installation process
  * on a controller node it is quite complex, and includes the project specific keystone and mysql database setup
  * the project specific configurartion (other than keystone and mysql) is done in script files named by project (nova.sh, neutron.sh,...)
  * NOTE: the project specific scripts run _before_ the database initialisation, because on the controller project specific database initialisation use the configuration to customisation the databases.
+ * ## Quick start
+ * You can populate bare Centos nodes with the required bootstrap files to run these scripts by using the script remote.sh:  run 'remote.sh <node name or ip address>', after editing the 'roles' file to reflect your actual configuration (currently, it pulls the config from git, so you actually need to creat a local version of roles and send it to each node...).  (This should be fixed by not installing git on the target nodes - instead, copy from the local directory).
