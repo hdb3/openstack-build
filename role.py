@@ -50,6 +50,12 @@ def main():
         if len(roles['controller']) > 1:
             print >> stderr, cfy + "Warning! - more than one controller was found - using first candidate for controller IP (%s)" % controller_ip
 
+    if 'compute' not in roles:
+        print >> stderr, cfy + "Warning! - no compute nodes found"
+
+    if 'network' not in roles:
+        print >> stderr, cfy + "Warning! - no network nodes found"
+
 
     # now grab a list of lcal interface addresses and see if we match any of them to our role list from the configuratioon file
 
