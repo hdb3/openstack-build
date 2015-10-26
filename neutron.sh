@@ -30,7 +30,7 @@ crudini --set --verbose  /etc/neutron/neutron.conf nova user_domain_id default
 crudini --set --verbose  /etc/neutron/neutron.conf nova region_name RegionOne
 crudini --set --verbose  /etc/neutron/neutron.conf nova project_name service
 crudini --set --verbose  /etc/neutron/neutron.conf nova username nova
-crudini --set --verbose  /etc/neutron/neutron.conf nova password =$SERVICE_PWD
+crudini --set --verbose  /etc/neutron/neutron.conf nova password $SERVICE_PWD
 
 crudini --set --verbose  /etc/neutron/neutron.conf keystone_authtoken auth_uri http://$CONTROLLER_IP:5000
 crudini --set --verbose  /etc/neutron/neutron.conf keystone_authtoken auth_url http://$CONTROLLER_IP:35357

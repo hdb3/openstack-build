@@ -17,4 +17,13 @@ sudo -E bash -ev keystone.sh && \
 sudo -E bash -ev glance.sh && \
 sudo -E bash -ev cinder.sh && \
 sudo -E bash -ev nova.sh && \
-sudo -E bash -ev neutron.sh
+sudo -E bash -ev neutron.sh && \
+if [[ $MY_ROLE == "compute" ]] ; then
+  echo "running compute node setup"
+  sudo -E bash -ev compute.sh
+fi && \
+if [[ $MY_ROLE == "network" ]] ; then
+  echo "running network node setup"
+  sudo -E bash -ev network.sh
+fi && \
+echo "all complete... :-)"
