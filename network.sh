@@ -6,5 +6,5 @@ sysctl -p
 # crudini --set --verbose 
 NETWORK_SERVICES="openvswitch libvirtd openstack-nova-compute neutron-openvswitch-agent"
 
-systemctl enable NETWORK_SERVICES
-systemctl start NETWORK_SERVICES
+systemctl enable $NETWORK_SERVICES
+systemctl start $NETWORK_SERVICES

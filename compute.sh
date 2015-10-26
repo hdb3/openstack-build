@@ -7,5 +7,5 @@ yum -y install openstack-nova-compute sysfsutils openstack-neutron openstack-neu
 crudini --set --verbose /etc/nova/nova.conf oslo_concurrency lock_path /var/lib/nova/tmp
 COMPUTE_SERVICES="openvswitch libvirtd openstack-nova-compute neutron-openvswitch-agent"
 
-systemctl enable COMPUTE_SERVICES
-systemctl start COMPUTE_SERVICES
+systemctl enable $COMPUTE_SERVICES
+systemctl start $COMPUTE_SERVICES
