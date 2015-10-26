@@ -9,3 +9,12 @@
  The file 'do_it' will start a complete installation process.
  The configuration file 'config' is used to provide basic localisation/customisation, e.g. passwords.
  The configuration file 'roles' is used to define a cluster and customise the local installation process for each node - this allows a single configuration to be used across a cluster and thereby ensure consistency between nodes in a cluster.
+## Quick Explanation
+There are three phases in the installation process
+* installation (currently form the distro packages for yum/centos)
+* pre-flight - install/configure infrastructure services like mysql, Rabbit MQ (server and/or client libraries)
+* OpenStack configuration and installation
+ * this phase is broken over several script files
+ * on a controller node it is quite complex, and includes the project specific keystone and mysql database setup
+ * the project specific configurartion (other than keystone and mysql) is done in script files named by project (nova.sh, neutron.sh,...)
+ * NOTE: these scripts run _before_ the database initialisation, because on the controller project specific database initialisation use the configuration to customisation the databases.
