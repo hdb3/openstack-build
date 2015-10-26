@@ -17,7 +17,7 @@ def getroles():
     try:
         infile = open("roles","r")
     except:
-        print >> stderr, cfr + "Hmmm, I had a teensy problem trying to find your role configuration file: is there a file somewhere here called 'role'?"
+        print >> stderr, cfr + "Hmmm, I had a teensy problem trying to find your role configuration file: is there a file somewhere here called 'roles'?"
         exit(1)
     for line in infile.readlines():
         if line[0] != '#':
