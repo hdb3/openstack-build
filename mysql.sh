@@ -1,6 +1,4 @@
-source config
 
-#create databases
 for user in keystone nova glance cinder neutron
     do mysql -u root --password=$DBPASSWD -e "\
          DROP DATABASE IF EXISTS $user;\

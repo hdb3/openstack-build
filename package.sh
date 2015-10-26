@@ -1,4 +1,4 @@
-#!/bin/bash
+
 yum -y install yum-plugin-priorities
 yum -y install epel-release
 yum -y install http://rdo.fedorapeople.org/openstack-kilo/rdo-release-kilo.rpm

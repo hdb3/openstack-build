@@ -1,7 +1,4 @@
 
-source config
-
-yum -y reinstall openstack-keystone
 sed -i -e "/^#/d" /etc/keystone/keystone.conf
 sed -i -e "/^$/d" /etc/keystone/keystone.conf
 
@@ -44,10 +41,10 @@ openstack endpoint create --publicurl http://$CONTROLLER_IP:5000/v2.0 --internal
 unset OS_TOKEN OS_URL
 
 #create credentials file
-echo 'export OS_PROJECT_DOMAIN_ID=default' >> creds
-echo 'export OS_USER_DOMAIN_ID=default' >> creds
-echo 'export OS_PROJECT_NAME=admin' >> creds
-echo 'export OS_TENANT_NAME=admin' >> creds
-echo 'export OS_USERNAME=admin' >> creds
-echo 'export OS_PASSWORD=password' >> creds
-echo 'export OS_AUTH_URL=http://$CONTROLLER_IP:35357/v3' >> creds
+echo "export OS_PROJECT_DOMAIN_ID=default" >> creds
+echo "export OS_USER_DOMAIN_ID=default" >> creds
+echo "export OS_PROJECT_NAME=admin" >> creds
+echo "export OS_TENANT_NAME=admin" >> creds
+echo "export OS_USERNAME=admin" >> creds
+echo "export OS_PASSWORD=password" >> creds
+echo "export OS_AUTH_URL=http://$CONTROLLER_IP:35357/v3" >> creds

@@ -1,7 +1,6 @@
-source config
 
 source creds
-yum -y reinstall openstack-keystone
+
 #create keystone entries for glance
 openstack user create --password $SERVICE_PWD glance
 openstack role add --project service --user glance admin

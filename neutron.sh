@@ -1,4 +1,4 @@
-source config
+
 source creds
 
 openstack user create --password $SERVICE_PWD neutron

@@ -1,4 +1,3 @@
-source config
 source creds
 
 #cp /usr/share/cinder/cinder-dist.conf /etc/cinder/cinder.conf

@@ -1,4 +1,4 @@
-source config
+
 source creds
 
 #create the keystone entries for nova
