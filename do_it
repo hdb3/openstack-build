@@ -1,4 +1,5 @@
 #!/bin/bash
+set -a # this ensures the variables set in the next step are exported to subsequent commands...
 source config
 $(./role.py)
 if [[ $OPENSTACK_INSTALL == "yes" ]] ; then
