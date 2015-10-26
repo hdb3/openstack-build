@@ -17,4 +17,4 @@ There are three phases in the installation process
  * this phase is broken over several script files
  * on a controller node it is quite complex, and includes the project specific keystone and mysql database setup
  * the project specific configurartion (other than keystone and mysql) is done in script files named by project (nova.sh, neutron.sh,...)
- * NOTE: these scripts run _before_ the database initialisation, because on the controller project specific database initialisation use the configuration to customisation the databases.
+ * NOTE: the project specific scripts run _before_ the database initialisation, because on the controller project specific database initialisation use the configuration to customisation the databases.
