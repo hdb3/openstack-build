@@ -1,0 +1,6 @@
+#172.16.0.1 controller
+172.17.42.1 controller
+172.16.0.2 compute
+172.16.0.3 compute
+172.16.0.4 compute
+172.16.0.5 network

@@ -1,0 +1,9 @@
+#!/bin/bash
+sudo bash -ev package.sh && \
+sudo bash -ev preflight.sh && \
+sudo bash -ev mysql.sh && \
+sudo bash -ev keystone.sh && \
+sudo bash -ev glance.sh && \
+sudo bash -ev cinder.sh && \
+sudo bash -ev nova.sh && \
+sudo bash -ev neutron.sh
