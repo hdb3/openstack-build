@@ -9,11 +9,11 @@ else
   echo -e "Will abort installation\e[0m"
   exit
 fi
-sudo bash -ev package.sh && \
-sudo bash -ev preflight.sh && \
-sudo bash -ev mysql.sh && \
-sudo bash -ev keystone.sh && \
-sudo bash -ev glance.sh && \
-sudo bash -ev cinder.sh && \
-sudo bash -ev nova.sh && \
-sudo bash -ev neutron.sh
+sudo -E bash -ev package.sh && \
+sudo -E bash -ev preflight.sh && \
+sudo -E bash -ev mysql.sh && \
+sudo -E bash -ev keystone.sh && \
+sudo -E bash -ev glance.sh && \
+sudo -E bash -ev cinder.sh && \
+sudo -E bash -ev nova.sh && \
+sudo -E bash -ev neutron.sh
