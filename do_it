@@ -14,10 +14,10 @@ sudo -E bash -ev package.sh && \
 sudo -E bash -ev preflight.sh && \
 if [[ $MY_ROLE == "controller" ]] ; then
   echo "running controller node setup"
-sudo -E bash -ev mysql.sh && \
-sudo -E bash -ev keystone.sh && \
-sudo -E bash -ev glance.sh && \
-sudo -E bash -ev cinder.sh && \
+  sudo -E bash -ev mysql.sh && \
+  sudo -E bash -ev keystone.sh && \
+  sudo -E bash -ev glance.sh && \
+  sudo -E bash -ev cinder.sh
 fi && \
 sudo -E bash -ev nova.sh && \
 sudo -E bash -ev neutron.sh && \
