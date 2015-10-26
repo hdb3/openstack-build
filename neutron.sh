@@ -1,4 +1,9 @@
 
+for f in /etc/neutron/neutron.conf /etc/neutron/plugins/ml2/ml2_conf.ini ; do
+  sed -i -e "/^#/d" $f
+  sed -i -e "/^$/d" $f
+done
+
 crudini --set --verbose  /etc/neutron/neutron.conf database connection mysql://neutron:$DBPASSWD@$CONTROLLER_IP/neutron
 
 # SERVICE_TENANT_ID=$(keystone tenant-list | awk '/ service / {print $2}')
