@@ -1,8 +1,9 @@
-sed -i -e "/^#/d" /etc/nova/nova.conf
-sed -i -e "/^$/d" /etc/nova/nova.conf
-
 
 if [[ $MY_ROLE == "controller" ||  $MY_ROLE == "compute" ]] ; then
+
+  sed -i -e "/^#/d" /etc/nova/nova.conf
+  sed -i -e "/^$/d" /etc/nova/nova.conf
+
   crudini --set --verbose /etc/nova/nova.conf database connection mysql://nova:$DBPASSWD@$CONTROLLER_IP/nova
 
   crudini --set --verbose /etc/nova/nova.conf DEFAULT rpc_backend rabbit
