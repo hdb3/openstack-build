@@ -1,14 +1,7 @@
 
-source creds
-
-openstack user create --password $SERVICE_PWD neutron
-openstack role add --project service --user neutron admin
-openstack service create --name neutron --description "OpenStack Networking" network
-openstack endpoint create  --publicurl http://$CONTROLLER_IP:9696  --internalurl http://$CONTROLLER_IP:9696  --adminurl http://$CONTROLLER_IP:9696  --region RegionOne  network
-
 crudini --set --verbose  /etc/neutron/neutron.conf database connection mysql://neutron:$DBPASSWD@$CONTROLLER_IP/neutron
 
-SERVICE_TENANT_ID=$(keystone tenant-list | awk '/ service / {print $2}')
+# SERVICE_TENANT_ID=$(keystone tenant-list | awk '/ service / {print $2}')
 
 crudini --set --verbose  /etc/neutron/neutron.conf DEFAULT rpc_backend rabbit
 crudini --set --verbose  /etc/neutron/neutron.conf DEFAULT auth_strategy keystone
@@ -52,7 +45,14 @@ crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup ena
 crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
 
 ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
-su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
-systemctl restart openstack-nova-api.service openstack-nova-scheduler.service openstack-nova-conductor.service
-systemctl enable neutron-server.service
-systemctl start neutron-server.service
+if [[ $MY_ROLE == "controller" ]] ; then
+  echo "running controller node setup"
+  source creds
+  openstack user create --password $SERVICE_PWD neutron
+  openstack role add --project service --user neutron admin
+  openstack service create --name neutron --description "OpenStack Networking" network
+  openstack endpoint create  --publicurl http://$CONTROLLER_IP:9696  --internalurl http://$CONTROLLER_IP:9696  --adminurl http://$CONTROLLER_IP:9696  --region RegionOne  network
+  su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
+  systemctl restart openstack-nova-api.service openstack-nova-scheduler.service openstack-nova-conductor.service
+  systemctl enable neutron-server.service
+  systemctl start neutron-server.service
