@@ -1,4 +1,6 @@
 #!/bin/bash
+source config
+$(./role.py)
 sudo bash -ev package.sh && \
 sudo bash -ev preflight.sh && \
 sudo bash -ev mysql.sh && \
