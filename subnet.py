@@ -13,7 +13,7 @@
 import netifaces
 from sys import exit, stderr,argv
 import colorama
-import ipaddress
+import ipaddress  # note - this requires the py2-ipaddress module!
 from struct import unpack
 
 def getaddrs():
