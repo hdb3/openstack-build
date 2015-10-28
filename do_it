@@ -1,4 +1,6 @@
 #!/bin/bash
+sudo dhclient eth1 eth2 # need to know how many interfaces are really needed - aimed at virtualised hosts really...
+                        # this is so that subsequent subnet probes find assigned IP addresses
 set -a # this ensures the variables set in the next step are exported to subsequent commands...
 source config
 $(./role.py)
@@ -23,10 +25,12 @@ sudo -E bash -ev nova.sh && \
 sudo -E bash -ev neutron.sh && \
 if [[ $MY_ROLE == "compute" ]] ; then
   echo "running compute node setup"
+  sudo -E crudini --set --verbose /etc/neutron/plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
   sudo -E bash -ev compute.sh
 fi && \
 if [[ $MY_ROLE == "network" ]] ; then
   echo "running network node setup"
+  sudo -E crudini --set --verbose /etc/neutron/plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
   sudo -E bash -ev network.sh
 fi && \
 echo "all complete... :-)"
