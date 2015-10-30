@@ -49,6 +49,9 @@ crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup ena
 crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset True
 crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
 
+crudini --set --verbose  /etc/neutron/dhcp_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
+crudini --set --verbose  /etc/neutron/l3_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
+
 ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini || echo "sym link  to /etc/neutron/plugin.ini already exists...."
 if [[ $MY_ROLE == "controller" ]] ; then
   echo "running controller node setup"
