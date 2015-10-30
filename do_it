@@ -1,6 +1,10 @@
-#!/bin/bash
+#!/bin/bash -e
 sudo dhclient eth1 eth2 # need to know how many interfaces are really needed - aimed at virtualised hosts really...
                         # this is so that subsequent subnet probes find assigned IP addresses
+sudo yum -y install epel-release http://rdo.fedorapeople.org/openstack-kilo/rdo-release-kilo.rpm # bizarrely the only source for python-ipaddress and python-colorama....
+sudo yum -y install python-netifaces python-pip python-ipaddress python-colorama
+# sudo pip install py2-ipaddress colorama # not needed if the RPMs have the packages...
+
 set -a # this ensures the variables set in the next step are exported to subsequent commands...
 source config
 $(./role.py)
@@ -12,25 +16,25 @@ else
   echo -e "Will abort installation\e[0m"
   exit
 fi
-sudo -E bash -ev package.sh && \
-sudo -E bash -ev preflight.sh && \
+sudo -E bash -ev package.sh
+sudo -E bash -ev preflight.sh
 if [[ $MY_ROLE == "controller" ]] ; then
   echo "running controller node setup"
-  sudo -E bash -ev mysql.sh && \
-  sudo -E bash -ev keystone.sh && \
-  sudo -E bash -ev glance.sh && \
+  sudo -E bash -ev mysql.sh
+  sudo -E bash -ev keystone.sh
+  sudo -E bash -ev glance.sh
   sudo -E bash -ev cinder.sh
-fi && \
-sudo -E bash -ev nova.sh && \
-sudo -E bash -ev neutron.sh && \
+fi
+sudo -E bash -ev nova.sh
+sudo -E bash -ev neutron.sh
 if [[ $MY_ROLE == "compute" ]] ; then
   echo "running compute node setup"
   sudo -E crudini --set --verbose /etc/neutron/plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
   sudo -E bash -ev compute.sh
-fi && \
+fi
 if [[ $MY_ROLE == "network" ]] ; then
   echo "running network node setup"
   sudo -E crudini --set --verbose /etc/neutron/plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
   sudo -E bash -ev network.sh
-fi && \
+fi
 echo "all complete... :-)"

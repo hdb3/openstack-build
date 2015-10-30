@@ -1,7 +1,6 @@
 
 yum -y install yum-plugin-priorities
-yum -y install epel-release
-yum -y install http://rdo.fedorapeople.org/openstack-kilo/rdo-release-kilo.rpm || echo "yum install: nothing to do"
+yum -y install epel-release http://rdo.fedorapeople.org/openstack-kilo/rdo-release-kilo.rpm || echo "yum install: nothing to do"
 yum -y upgrade
 PACKAGES="crudini mod_wsgi python-openstackclient rabbitmq mariadb MySQL-python ntp"
 if [[ $MY_ROLE == "controller" ]] ; then
