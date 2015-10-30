@@ -1,6 +1,6 @@
 #!/bin/bash -e
 sudo dhclient eth1 || echo "ignore interfaces which don't exist.."
-sudo dhclient eth2 || echo "ignore interfaces which don't exist.."
+sudo dhclient -x eth2 || echo "ignore interfaces which don't exist.."
  # need to know how many interfaces are really needed - aimed at virtualised hosts really...
 # this is so that subsequent subnet probes find assigned IP addresses
 sudo yum -y install epel-release http://rdo.fedorapeople.org/openstack-kilo/rdo-release-kilo.rpm # bizarrely the only source for python-ipaddress and python-colorama....
