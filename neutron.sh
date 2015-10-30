@@ -39,22 +39,21 @@ crudini --set --verbose  /etc/neutron/neutron.conf keystone_authtoken project_na
 crudini --set --verbose  /etc/neutron/neutron.conf keystone_authtoken username neutron
 crudini --set --verbose  /etc/neutron/neutron.conf keystone_authtoken password $SERVICE_PWD
 
-crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers flat,vlan,gre,vxlan
-crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types gre
-crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers openvswitch
 
-crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_gre tunnel_id_ranges 1:1000
 
-crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group True
-crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset True
-crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
 
-crudini --set --verbose  /etc/neutron/dhcp_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
-crudini --set --verbose  /etc/neutron/l3_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
 
-ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini || echo "sym link  to /etc/neutron/plugin.ini already exists...."
 if [[ $MY_ROLE == "controller" ]] ; then
-  echo "running controller node setup"
+  echo "running neutron controller node setup"
+
+  ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini || echo "sym link  to /etc/neutron/plugin.ini already exists...."
+  crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers flat,vlan,gre,vxlan
+  crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types gre
+  crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers openvswitch
+  crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2_type_gre tunnel_id_ranges 1:1000
+  crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_security_group True
+  crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini securitygroup enable_ipset True
+
   source creds
   openstack user create --password $SERVICE_PWD neutron
   openstack role add --project service --user neutron admin
@@ -64,4 +63,31 @@ if [[ $MY_ROLE == "controller" ]] ; then
   systemctl restart openstack-nova-api openstack-nova-scheduler openstack-nova-conductor
   systemctl enable neutron-server
   systemctl start neutron-server
+fi
+
+if [[ $MY_ROLE == "compute" || $MY_ROLE == "network" ]] ; then
+  echo "running neutron compute/network node setup"
+  crudini --set --verbose  /etc/neutron/dhcp_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
+  crudini --set --verbose  /etc/neutron/l3_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
+  crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
+  crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup enable_security_group True
+  crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup enable_ipset True
+  crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
+  crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini agent tunnel_types gre
+  echo 'net.ipv4.conf.all.rp_filter=0' >> /etc/sysctl.conf
+  echo 'net.ipv4.conf.default.rp_filter=0' >> /etc/sysctl.conf
+  # echo 'net.bridge.bridge-nf-call-iptables=1' >> /etc/sysctl.conf
+  # echo 'net.bridge.bridge-nf-call-ip6tables=1' >> /etc/sysctl.conf
+  sysctl -p
+fi
+
+
+if [[ $MY_ROLE == "network" ]] ; then
+  NETWORK_SERVICES="openvswitch neutron-openvswitch-agent neutron-dhcp-agent neutron-l3-agent neutron-metadata-agent"
+  systemctl enable $NETWORK_SERVICES neutron-ovs-cleanup ; systemctl start $NETWORK_SERVICES
+fi
+
+if [[ $MY_ROLE == "compute" ]] ; then
+  NETWORK_SERVICES="openvswitch neutron-openvswitch-agent "
+  systemctl enable $NETWORK_SERVICES ; systemctl start $NETWORK_SERVICES
 fi

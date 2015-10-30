@@ -3,7 +3,7 @@ sudo dhclient eth1 || echo "ignore interfaces which don't exist.."
 sudo dhclient -x eth2 || echo "ignore interfaces which don't exist.."
  # need to know how many interfaces are really needed - aimed at virtualised hosts really...
 # this is so that subsequent subnet probes find assigned IP addresses
-sudo yum -y install epel-release
+sudo yum -y install epel-release deltarpm
 sudo yum -y install python-netifaces python-pip # python-ipaddress python-colorama # colorama and ipaddress not available in Centos7 epel?
 sudo pip install py2-ipaddress colorama # not needed if the RPMs have the packages...
 
@@ -29,14 +29,14 @@ if [[ $MY_ROLE == "controller" ]] ; then
 fi
 sudo -E bash -ev nova.sh
 sudo -E bash -ev neutron.sh
-if [[ $MY_ROLE == "compute" ]] ; then
-  echo "running compute node setup"
-  sudo -E crudini --set --verbose /etc/neutron/plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
-  sudo -E bash -ev compute.sh
-fi
-if [[ $MY_ROLE == "network" ]] ; then
-  echo "running network node setup"
-  sudo -E crudini --set --verbose /etc/neutron/plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
-  sudo -E bash -ev network.sh
-fi
+#if [[ $MY_ROLE == "compute" ]] ; then
+  #echo "running compute node setup"
+  #sudo -E crudini --set --verbose /etc/neutron/plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
+  #sudo -E bash -ev compute.sh
+#fi
+#if [[ $MY_ROLE == "network" ]] ; then
+  #echo "running network node setup"
+  #sudo -E crudini --set --verbose /etc/neutron/plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
+  #sudo -E bash -ev network.sh
+#fi
 echo "all complete... :-)"
