@@ -17,7 +17,7 @@ if [[ $MY_ROLE == "controller" ||  $MY_ROLE == "compute" ]] ; then
   crudini --set --verbose /etc/nova/nova.conf DEFAULT linuxnet_interface_driver nova.network.linux_net.LinuxOVSInterfaceDriver
   crudini --set --verbose /etc/nova/nova.conf DEFAULT firewall_driver nova.virt.firewall.NoopFirewallDriver
   # crudini --set --verbose /etc/nova/nova.conf libvirt qemu
-  crudini --set --verbose /etc/nova/nova.conf libvirt "kvm|qemu"
+  crudini --set --verbose /etc/nova/nova.conf libvirt virt_type qemu
 
   crudini --set --verbose /etc/nova/nova.conf oslo_messaging_rabbit rabbit_host $CONTROLLER_IP
   crudini --set --verbose /etc/nova/nova.conf oslo_messaging_rabbit rabbit_userid openstack
@@ -65,7 +65,7 @@ if [[ $MY_ROLE == "compute" ]] ; then
   # echo 'net.bridge.bridge-nf-call-ip6tables=1' >> /etc/sysctl.conf
   sysctl -p
   crudini --set --verbose /etc/nova/nova.conf oslo_concurrency lock_path /var/lib/nova/tmp
-  COMPUTE_SERVICES="openvswitch libvirtd openstack-nova-compute neutron-openvswitch-agent"
+  COMPUTE_SERVICES="openvswitch libvirtd openstack-nova-compute"
   systemctl enable $COMPUTE_SERVICES
   systemctl start $COMPUTE_SERVICES
 fi

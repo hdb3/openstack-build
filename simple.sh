@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ev
 source creds
 neutron net-create testnet
 export NETID=`neutron net-list| awk '/ testnet / {print $2}'`
