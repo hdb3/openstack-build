@@ -20,7 +20,7 @@ else
 fi
 sudo -E bash -ev package.sh
 sudo -E bash -ev preflight.sh
-if [[ $MY_ROLE == "controller" ]] ; then
+if [[ $MY_ROLE =~ "controller" ]] ; then
   echo "running controller node setup"
   sudo -E bash -ev mysql.sh
   sudo -E bash -ev keystone.sh

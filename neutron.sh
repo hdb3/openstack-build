@@ -43,7 +43,7 @@ crudini --set --verbose  /etc/neutron/neutron.conf keystone_authtoken password $
 
 
 
-if [[ $MY_ROLE == "controller" ]] ; then
+if [[ $MY_ROLE =~ "controller" ]] ; then
   echo "running neutron controller node setup"
 
   ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini || echo "sym link  to /etc/neutron/plugin.ini already exists...."
@@ -65,7 +65,7 @@ if [[ $MY_ROLE == "controller" ]] ; then
   systemctl start neutron-server
 fi
 
-if [[ $MY_ROLE == "compute" || $MY_ROLE == "network" ]] ; then
+if [[ $MY_ROLE =~ "compute" || $MY_ROLE =~ "network" ]] ; then
   echo "running neutron compute/network node setup"
   crudini --set --verbose  /etc/neutron/dhcp_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
   crudini --set --verbose  /etc/neutron/l3_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
@@ -82,12 +82,12 @@ if [[ $MY_ROLE == "compute" || $MY_ROLE == "network" ]] ; then
 fi
 
 
-if [[ $MY_ROLE == "network" ]] ; then
+if [[ $MY_ROLE =~ "network" ]] ; then
   NETWORK_SERVICES="openvswitch neutron-openvswitch-agent neutron-dhcp-agent neutron-l3-agent neutron-metadata-agent"
   systemctl enable $NETWORK_SERVICES neutron-ovs-cleanup ; systemctl start $NETWORK_SERVICES
 fi
 
-if [[ $MY_ROLE == "compute" ]] ; then
+if [[ $MY_ROLE =~ "compute" ]] ; then
   NETWORK_SERVICES="openvswitch neutron-openvswitch-agent "
   systemctl enable $NETWORK_SERVICES ; systemctl start $NETWORK_SERVICES
 fi

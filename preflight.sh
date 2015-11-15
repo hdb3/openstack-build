@@ -7,7 +7,7 @@ systemctl disable firewalld || echo "not needed"
 sed -i 's/enforcing/disabled/g' /etc/selinux/config
 echo 0 > /sys/fs/selinux/enforce
 
-if [[ $MY_ROLE == "controller" ]] ; then
+if [[ $MY_ROLE =~ "controller" ]] ; then
   echo "running controller node setup"
 #install messaging service
 systemctl enable rabbitmq-server || echo "not needed"

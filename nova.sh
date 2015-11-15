@@ -1,5 +1,5 @@
 
-if [[ $MY_ROLE == "controller" ||  $MY_ROLE == "compute" ]] ; then
+if [[ $MY_ROLE =~ "controller" ||  $MY_ROLE =~ "compute" ]] ; then
 
   sed -i -e "/^#/d" /etc/nova/nova.conf
   sed -i -e "/^$/d" /etc/nova/nova.conf
@@ -44,7 +44,7 @@ if [[ $MY_ROLE == "controller" ||  $MY_ROLE == "compute" ]] ; then
   crudini --set --verbose /etc/nova/nova.conf neutron metadata_proxy_shared_secret meta123
 fi
 
-if [[ $MY_ROLE == "controller" ]] ; then
+if [[ $MY_ROLE =~ "controller" ]] ; then
   echo "running controller node setup"
   source creds
   openstack user create --password $SERVICE_PWD nova
@@ -57,7 +57,7 @@ if [[ $MY_ROLE == "controller" ]] ; then
   systemctl start $NOVA_CONTROLLER_SERVICES
 fi
 
-if [[ $MY_ROLE == "compute" ]] ; then
+if [[ $MY_ROLE =~ "compute" ]] ; then
   echo "running compute node setup"
   echo 'net.ipv4.conf.all.rp_filter=0' >> /etc/sysctl.conf
   echo 'net.ipv4.conf.default.rp_filter=0' >> /etc/sysctl.conf

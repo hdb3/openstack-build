@@ -89,12 +89,9 @@ def main():
     for (iface,addr) in ifaces:
         config_addrs.add(addr)
         if addr in roleaddrs:
-            print "adding roles:" , roleaddrs[addr]
             my_roles = my_roles | roleaddrs[addr]
             my_addrs.add(addr)
 
-    print "my_roles",my_roles
-    print "my_addrs",my_addrs
     if len(my_roles) == 0:
         print >> stderr, cfr + "Error - no role was found based on local addresses for this host"
         print >> stderr, "The following local interface addresses were found",
