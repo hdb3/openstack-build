@@ -1,7 +1,9 @@
 #stack information
 ADMIN_TOKEN=ADMIN123
 SERVICE_PWD=Service123
-ADMIN_PWD=password
-META_PWD=meta123
+ADMIN_PWD=admin
+META_PWD=meta
 DBPASSWD=root
 TUNNEL_SUBNET=172.16.0.0/24
+# comment out if you don't want horizon on your controller!
+INSTALL_HORIZON=TRUE
