@@ -67,9 +67,12 @@ fi
 
 if [[ $MY_ROLE =~ "compute" || $MY_ROLE =~ "network" ]] ; then
   echo "running neutron compute/network node setup"
+  TUNNEL_IP=$(./subnet.py $TUNNEL_SUBNET)
+  if [[ $TUNNEL_IP == "ERROR" ]] ; then TUNNEL_IP=$MY_IP ; fi
   crudini --set --verbose  /etc/neutron/dhcp_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
   crudini --set --verbose  /etc/neutron/l3_agent.ini DEFAULT interface_driver neutron.agent.linux.interface.OVSInterfaceDriver
-  crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
+  # crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
+  crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini ovs local_ip $TUNNEL_IP
   crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup enable_security_group True
   crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup enable_ipset True
   crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver

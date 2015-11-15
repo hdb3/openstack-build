@@ -60,7 +60,8 @@ def main():
            print "%s" % addr
            exit(0)
     red("no interface was found for the network %s" % net.exploded) 
-    exit(1)
+    # exit(1)
+    print "ERROR"
 # end of main!
 
 main()
