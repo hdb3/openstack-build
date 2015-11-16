@@ -26,7 +26,7 @@ if [[ $MY_ROLE =~ "controller" ]] ; then
   sudo -E bash -ev keystone.sh
   sudo -E bash -ev glance.sh
   sudo -E bash -ev cinder.sh
-  if [ -z "$INSTALL_HORIZON" ]; then sudo -E bash -ev horizon.sh ; fi
+  if [ -n "$INSTALL_HORIZON" ]; then sudo -E bash -ev horizon.sh ; fi
 fi
 sudo -E bash -ev nova.sh
 sudo -E bash -ev neutron.sh
