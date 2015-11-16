@@ -33,7 +33,7 @@ export OS_URL=http://$CONTROLLER_IP:35357/v2.0
 
 openstack service create --name keystone --description "OpenStack Identity" identity
 openstack project create --description "Admin Project" admin
-openstack user create --password password admin
+openstack user create --password $ADMIN_PWD admin
 openstack role create admin
 openstack role add --project admin --user admin admin
 openstack project create --description "Service Project" service
@@ -46,5 +46,5 @@ echo "export OS_USER_DOMAIN_ID=default" >> creds
 echo "export OS_PROJECT_NAME=admin" >> creds
 echo "export OS_TENANT_NAME=admin" >> creds
 echo "export OS_USERNAME=admin" >> creds
-echo "export OS_PASSWORD=password" >> creds
+echo "export OS_PASSWORD=$ADMIN_PWD" >> creds
 echo "export OS_AUTH_URL=http://$CONTROLLER_IP:35357/v3" >> creds
