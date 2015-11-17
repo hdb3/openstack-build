@@ -30,14 +30,4 @@ if [[ $MY_ROLE =~ "controller" ]] ; then
 fi
 sudo -E bash -ev nova.sh
 sudo -E bash -ev neutron.sh
-#if [[ $MY_ROLE == "compute" ]] ; then
-  #echo "running compute node setup"
-  #sudo -E crudini --set --verbose /etc/neutron/plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
-  #sudo -E bash -ev compute.sh
-#fi
-#if [[ $MY_ROLE == "network" ]] ; then
-  #echo "running network node setup"
-  #sudo -E crudini --set --verbose /etc/neutron/plugin.ini ovs local_ip $(./subnet.py $TUNNEL_SUBNET)
-  #sudo -E bash -ev network.sh
-#fi
 echo "all complete... :-)"
