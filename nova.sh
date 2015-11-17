@@ -52,9 +52,9 @@ if [[ $MY_ROLE =~ "controller" ]] ; then
   openstack service create --name nova --description "OpenStack Compute" compute
   openstack endpoint create  --publicurl http://$CONTROLLER_IP:8774/v2/%\(tenant_id\)s --internalurl http://$CONTROLLER_IP:8774/v2/%\(tenant_id\)s --adminurl http://$CONTROLLER_IP:8774/v2/%\(tenant_id\)s --region RegionOne compute
   su -s /bin/sh -c "nova-manage db sync" nova
-  NOVA_CONTROLLER_SERVICES="openstack-nova-api openstack-nova-cert openstack-nova-consoleauth openstack-nova-scheduler openstack-nova-conductor openstack-nova-novncproxy"
-  systemctl enable $NOVA_CONTROLLER_SERVICES
-  systemctl start $NOVA_CONTROLLER_SERVICES
+   #CONTROLLER_SERVICES="openstack-nova-api openstack-nova-cert openstack-nova-consoleauth openstack-nova-scheduler openstack-nova-conductor openstack-nova-novncproxy"
+  systemctl enable $CONTROLLER_SERVICES
+  systemctl start $CONTROLLER_SERVICES
 fi
 
 if [[ $MY_ROLE =~ "compute" ]] ; then
@@ -65,7 +65,7 @@ if [[ $MY_ROLE =~ "compute" ]] ; then
   # echo 'net.bridge.bridge-nf-call-ip6tables=1' >> /etc/sysctl.conf
   sysctl -p
   crudini --set --verbose /etc/nova/nova.conf oslo_concurrency lock_path /var/lib/nova/tmp
-  COMPUTE_SERVICES="openvswitch libvirtd openstack-nova-compute"
+   #COMPUTE_SERVICES="openvswitch libvirtd openstack-nova-compute"
   systemctl enable $COMPUTE_SERVICES
   systemctl start $COMPUTE_SERVICES
 fi
