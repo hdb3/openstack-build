@@ -36,6 +36,9 @@ crudini --set --verbose /etc/my.cnf mysqld init-connect "'SET NAMES utf8'"
 crudini --set --verbose /etc/my.cnf mysqld character-set-server utf8
 crudini --set --verbose /etc/my.cnf mysqld max_connections 25000
 #start database server
+#wipe the database directory in case this is not the first attempt to install openstack
+systemctl stop mariadb || echo "mariadb not running yet...."
+rm -rf /var/lib/mysql/*
 systemctl enable mariadb || echo "not needed"
 systemctl start mariadb || echo "not needed"
 mysqladmin -u root password $DBPASSWD

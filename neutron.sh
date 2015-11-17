@@ -75,7 +75,8 @@ if [[ $MY_ROLE =~ "compute" || $MY_ROLE =~ "network" ]] ; then
   crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini ovs local_ip $TUNNEL_IP
   crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup enable_security_group True
   crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup enable_ipset True
-  crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
+  crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup firewall_driver neutron.agent.firewall.NoopFirewallDriver
+  # crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini securitygroup firewall_driver neutron.agent.linux.iptables_firewall.OVSHybridIptablesFirewallDriver
   crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini agent tunnel_types gre
   echo 'net.ipv4.conf.all.rp_filter=0' >> /etc/sysctl.conf
   echo 'net.ipv4.conf.default.rp_filter=0' >> /etc/sysctl.conf
