@@ -86,6 +86,10 @@ fi
 
 
 if [[ $MY_ROLE =~ "network" ]] ; then
+  systemctl start openvswitch
+  ovs-vsctl --may-exist add-br $EXTERNAL_BRIDGE
+  ovs-vsctl --may-exist add-port $EXTERNAL_BRIDGE $EXTERNAL_PORT
+  crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini ovs bridge_mappings external:$EXTERNAL_BRIDGE
   NETWORK_SERVICES="openvswitch neutron-openvswitch-agent neutron-dhcp-agent neutron-l3-agent neutron-metadata-agent"
   systemctl enable $NETWORK_SERVICES neutron-ovs-cleanup ; systemctl start $NETWORK_SERVICES
 fi
