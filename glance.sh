@@ -46,6 +46,11 @@ systemctl enable openstack-glance-api openstack-glance-registry || echo "not nee
 systemctl start openstack-glance-api openstack-glance-registry || echo "not needed"
 
 #upload the cirros image to glance
-wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
+if [ -f cirros-0.3.4-x86_64-disk.img ]
+then
+  echo "no need to download cirros again"
+else
+  wget http://download.cirros-cloud.net/0.3.4/cirros-0.3.4-x86_64-disk.img
+fi
 glance image-create --name "cirros-0.3.3-x86_64" --file cirros-0.3.4-x86_64-disk.img --disk-format qcow2 --container-format bare --is-public True --progress
 glance image-list

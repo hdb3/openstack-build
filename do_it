@@ -3,8 +3,8 @@ sudo dhclient eth1 || echo "ignore interfaces which don't exist.."
 sudo dhclient -x eth2 || echo "ignore interfaces which don't exist.."
  # need to know how many interfaces are really needed - aimed at virtualised hosts really...
 # this is so that subsequent subnet probes find assigned IP addresses
-sudo yum -y install epel-release deltarpm
-sudo yum -y install python-netifaces python-pip # python-ipaddress python-colorama # colorama and ipaddress not available in Centos7 epel?
+sudo yum -q  -y install epel-release deltarpm
+sudo yum -q  -y install python-netifaces python-pip # python-ipaddress python-colorama # colorama and ipaddress not available in Centos7 epel?
 sudo pip install py2-ipaddress colorama # not needed if the RPMs have the packages...
 
 set -a # this ensures the variables set in the next step are exported to subsequent commands...
@@ -19,7 +19,8 @@ else
   exit
 fi
 sudo -E bash -ev package.sh
-sudo -E bash -ev services.sh
+source services
+sudo systemctl stop $NETWORK_SERVICES $COMPUTE_SERVICES $CONTROLLER_SERVICES
 sudo -E bash -ev preflight.sh
 if [[ $MY_ROLE =~ "controller" ]] ; then
   echo "running controller node setup"
