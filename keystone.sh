@@ -13,7 +13,7 @@ crudini --set --verbose /etc/keystone/keystone.conf revoke driver keystone.contr
 #chown -R keystone:keystone /var/log/keystone
 #chown -R keystone:keystone /etc/keystone/ssl
 #chmod -R o-rwx /etc/keystone/ssl
-su -s /bin/sh -c "keystone-manage db_sync" keystone || echo "*** keystone-manage db_sync FAILED"
+su -s /bin/sh -c "keystone-manage db_sync" keystone
 
 sed -i.bak -e "/^ServerRoot/a ServerName $CONTROLLER_IP" /etc/httpd/conf/httpd.conf
 

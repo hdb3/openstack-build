@@ -1,9 +1,9 @@
 #!/bin/bash
 # prefilight.sh
-systemctl enable ntpd || echo "not needed"
-systemctl start ntpd || echo "not needed"
-systemctl stop firewalld || echo "not needed"
-systemctl disable firewalld || echo "not needed"
+systemctl enable ntpd
+systemctl restart ntpd
+systemctl stop firewalld
+systemctl disable firewalld
 
 sed -i 's/enforcing/disabled/g' /etc/selinux/config
 echo 0 > /sys/fs/selinux/enforce || echo "not needed"
@@ -11,17 +11,17 @@ echo 0 > /sys/fs/selinux/enforce || echo "not needed"
 if [[ $MY_ROLE =~ "controller" ]] ; then
   echo "running controller node setup"
 #install messaging service
-systemctl enable rabbitmq-server || echo "not needed"
-systemctl start rabbitmq-server || echo "not needed"
+systemctl enable rabbitmq-server
+systemctl restart rabbitmq-server
 
 rabbitmqctl add_user openstack Service123 || echo "not needed"
 rabbitmqctl set_permissions openstack ".*" ".*" ".*"
 
-systemctl enable memcached || echo "not needed"
-systemctl start memcached || echo "not needed"
+systemctl enable memcached
+systemctl restart memcached
 
-systemctl enable httpd || echo "not needed"
-systemctl start httpd || echo "not needed"
+systemctl enable httpd
+systemctl restart httpd
 
 sed -i -e "/^\!includedir/d" /etc/my.cnf
 sed -i -e "/^#/d" /etc/my.cnf
@@ -35,9 +35,9 @@ crudini --set --verbose /etc/my.cnf mysqld character-set-server utf8
 crudini --set --verbose /etc/my.cnf mysqld max_connections 25000
 
 #wipe the database directory in case this is not the first attempt to install openstack
-systemctl stop mariadb || echo "mariadb not running yet...."
+systemctl stop mariadb
 rm -rf /var/lib/mysql/*
-systemctl enable mariadb || echo "not needed"
-systemctl start mariadb || echo "not needed"
+systemctl enable mariadb
+systemctl restart mariadb
 mysqladmin -u root password $DBPASSWD
 fi 

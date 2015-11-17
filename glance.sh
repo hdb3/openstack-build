@@ -42,8 +42,8 @@ crudini --set --verbose /etc/glance/glance-registry.conf DEFAULT verbose True
 
 #start glance
 su -s /bin/sh -c "glance-manage db_sync" glance
-systemctl enable openstack-glance-api openstack-glance-registry || echo "not needed"
-systemctl start openstack-glance-api openstack-glance-registry || echo "not needed"
+systemctl enable openstack-glance-api openstack-glance-registry
+systemctl restart openstack-glance-api openstack-glance-registry
 
 #upload the cirros image to glance
 if [ -f cirros-0.3.4-x86_64-disk.img ]

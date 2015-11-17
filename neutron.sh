@@ -46,7 +46,7 @@ crudini --set --verbose  /etc/neutron/neutron.conf keystone_authtoken password $
 if [[ $MY_ROLE =~ "controller" ]] ; then
   echo "running neutron controller node setup"
 
-  ln -s /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini || echo "sym link  to /etc/neutron/plugin.ini already exists...."
+  ln -fs /etc/neutron/plugins/ml2/ml2_conf.ini /etc/neutron/plugin.ini
   crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2 type_drivers flat,vlan,gre,vxlan
   crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2 tenant_network_types gre
   crudini --set --verbose  /etc/neutron/plugins/ml2/ml2_conf.ini ml2 mechanism_drivers openvswitch
@@ -62,7 +62,7 @@ if [[ $MY_ROLE =~ "controller" ]] ; then
   su -s /bin/sh -c "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
   systemctl restart openstack-nova-api openstack-nova-scheduler openstack-nova-conductor
   systemctl enable neutron-server
-  systemctl start neutron-server
+  systemctl restart neutron-server
 fi
 
 if [[ $MY_ROLE =~ "compute" || $MY_ROLE =~ "network" ]] ; then
@@ -87,15 +87,15 @@ fi
 
 
 if [[ $MY_ROLE =~ "network" ]] ; then
-  systemctl start openvswitch
+  systemctl restart openvswitch
   ovs-vsctl --may-exist add-br $EXTERNAL_BRIDGE
   ovs-vsctl --may-exist add-port $EXTERNAL_BRIDGE $EXTERNAL_PORT
   crudini --set --verbose  /etc/neutron/plugins/openvswitch/ovs_neutron_plugin.ini ovs bridge_mappings external:$EXTERNAL_BRIDGE
    #NETWORK_SERVICES="openvswitch neutron-openvswitch-agent neutron-dhcp-agent neutron-l3-agent neutron-metadata-agent"
-  systemctl enable $NETWORK_SERVICES neutron-ovs-cleanup ; systemctl start $NETWORK_SERVICES
+  systemctl enable $NETWORK_SERVICES neutron-ovs-cleanup ; systemctl restart $NETWORK_SERVICES
 fi
 
 if [[ $MY_ROLE =~ "compute" ]] ; then
    #NETWORK_SERVICES="openvswitch neutron-openvswitch-agent "
-  systemctl enable $NETWORK_SERVICES ; systemctl start $NETWORK_SERVICES
+  systemctl enable $NETWORK_SERVICES ; systemctl restart $NETWORK_SERVICES
 fi
