@@ -5,7 +5,6 @@ ADMIN_PWD=admin
 META_PWD=meta
 DBPASSWD=root
 TUNNEL_SUBNET=172.16.0.0/24
-EXTERNAL_BRIDGE=br-eth2
 EXTERNAL_PORT=eth2
 # comment out if you don't want horizon on your controller!
 INSTALL_HORIZON=TRUE

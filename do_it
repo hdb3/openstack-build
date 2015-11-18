@@ -1,4 +1,7 @@
-#!/bin/bash -e
+#!/bin/bash
+{
+set -e
+mkdir /tmp/install_lock
 sudo dhclient eth1 || echo "ignore interfaces which don't exist.."
 sudo dhclient -x eth2 || echo "ignore interfaces which don't exist.."
  # need to know how many interfaces are really needed - aimed at virtualised hosts really...
@@ -32,4 +35,6 @@ if [[ $MY_ROLE =~ "controller" ]] ; then
 fi
 sudo -E bash -ev nova.sh
 sudo -E bash -ev neutron.sh
+}
+rmdir /tmp/install_lock
 echo "all complete... :-)"
