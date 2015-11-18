@@ -86,7 +86,9 @@ if [[ $MY_ROLE =~ "compute" || $MY_ROLE =~ "network" ]] ; then
 fi
 
 
-if [[ $MY_ROLE =~ "network" ]] ; then
+# if [[ $MY_ROLE =~ "network" ]] ; then
+# the following needed if external networks are needed on compute nodes (and probably also for distributed virtual routers)
+if [[ $MY_ROLE =~ "compute" || $MY_ROLE =~ "network" ]] ; then
   systemctl restart openvswitch
   ip link set dev $EXTERNAL_PORT up
   ovs-vsctl --may-exist add-br br-ex
